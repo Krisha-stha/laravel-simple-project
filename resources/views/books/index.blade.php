@@ -1,4 +1,3 @@
-
 @extends('layout')
 @section('content')
 <h2>Books</h2>
@@ -54,6 +53,7 @@
     </select>
     <button type="submit" class="btn btn-primary">Add Book</button>
 </form>
+
 {{-- Books Table --}}
 <table class="table mt-4 w-100">
     <thead>
@@ -63,6 +63,7 @@
             <th>Description</th>
             <th>Price</th>
             <th>Image</th>
+            <th>Actions</th> {{-- New column --}}
         </tr>
     </thead>
     <tbody>
@@ -79,10 +80,18 @@
                         -
                     @endif
                 </td>
+                <td>
+                    <a href="{{ route('books.edit', $book->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="{{ route('books.destroy', $book->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                </td>
             </tr>
         @empty
             <tr>
-                <td colspan="5">No books found.</td>
+                <td colspan="6">No books found.</td>
             </tr>
         @endforelse
     </tbody>

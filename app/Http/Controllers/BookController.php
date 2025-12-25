@@ -3,35 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Services\BookService;
-use Illuminate\Http\Request;
-use App\Repositories\Eloquent\BookRepository;
+use App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
-    // protected BookService $bookService;
-
-    // public function __construct(BookService $bookService)
-    // {
-    //     $this->bookService = $bookService;
-    // }
-
-    public function __construct(protected BookService $bookService) {}
+    public function __construct(
+        private readonly BookService $bookService
+    ) {}
 
     public function index()
     {
-        $books = $this->bookService->getAllBooks();
-        return view('books.index', compact('books'));
+        return view('books.index', [
+            'books' => $this->bookService->getAllBooks()
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
-        try {
-            $this->bookService->storeBook($request);
-            return redirect()->route('books.index')->with('success', 'Book added successfully');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
+        $this->bookService->store($request->validated(), $request);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Book added successfully');
+    }
+
+    public function edit(int $id)
+    {
+        return view('books.edit', [
+            'book' => $this->bookService->getBookById($id)
+        ]);
+    }
+
+    public function update(BookRequest $request, int $id)
+    {
+        $this->bookService->update($id, $request->validated(), $request);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Book updated successfully');
+    }
+
+    public function destroy(int $id)
+    {
+        $this->bookService->delete($id);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Book deleted successfully');
     }
 }

@@ -12,6 +12,7 @@ Route::post('/authors', [AuthorController::class, 'store'])->name('authors.store
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
 Route::post('/books', [BookController::class, 'store'])->name('books.store');
 Route::post('/books/{book}/borrow', [BookController::class, 'borrow'])->name('books.borrow');
+Route::resource('books', BookController::class);
 
 Route::get('/', function () {
     return view('welcome');
