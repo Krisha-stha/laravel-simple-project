@@ -18,10 +18,9 @@ class BookService
         return $this->bookRepository->getAll();
     }
 
-    public function getBookById(int $id): Book
+    public function getBookById(int $id): ?Book
     {
-        return $this->bookRepository->find($id)
-            ?? throw new \RuntimeException('Book not found');
+        return $this->bookRepository->find($id);
     }
 
     public function store(array $data, Request $request): Book
@@ -33,7 +32,7 @@ class BookService
         return $this->bookRepository->create($data);
     }
 
-    public function update(int $id, array $data, Request $request): Book
+    public function update(int $id, array $data, Request $request): ?Book
     {
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('books', 'public');

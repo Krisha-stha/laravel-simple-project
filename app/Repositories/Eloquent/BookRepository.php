@@ -23,12 +23,12 @@ class BookRepository implements BookRepositoryInterface
         return Book::create($data);
     }
 
-    public function update(int $id, array $data): Book
+    public function update(int $id, array $data): ?Book  
     {
         $book = $this->find($id);
 
         if (!$book) {
-            throw new \RuntimeException('Book not found');
+            return null;  
         }
 
         $book->update($data);
@@ -41,7 +41,7 @@ class BookRepository implements BookRepositoryInterface
         $book = $this->find($id);
 
         if (!$book) {
-            throw new \RuntimeException('Book not found');
+            return false;  
         }
 
         return $book->delete();

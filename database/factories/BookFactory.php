@@ -10,13 +10,16 @@ class BookFactory extends Factory
 {
     protected $model = Book::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(),
+            'title' => $this->faker->sentence(3), 
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->randomFloat(2, 10, 200),
-            'author_id' => Author::factory(), // creates a new author automatically
+            'image' => $this->faker->imageUrl(200, 200, 'books'),
+            'author_id' => function() {
+                return Author::factory()->create()->id;
+            },
         ];
     }
 }

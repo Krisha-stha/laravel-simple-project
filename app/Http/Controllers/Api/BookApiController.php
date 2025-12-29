@@ -17,7 +17,12 @@ class BookApiController extends Controller
   public function index(): JsonResponse
   {
     $books = $this->bookService->getAllBooks();
-    return $this->successResponse(data: $books, message: 'Books retrieved successfully');
+    
+    // Convert Collection to array
+    return $this->successResponse(
+        $books->toArray(), 
+        'Books retrieved successfully'
+    );
   }
 
   public function show(int $id): JsonResponse
@@ -25,17 +30,26 @@ class BookApiController extends Controller
     $book = $this->bookService->getBookById($id);
 
     if (!$book) {
-      return $this->errorResponse(message: 'Book not found', status: 404);
+      return $this->errorResponse('Book not found', 404);
     }
 
-    return $this->successResponse(data: $book, message: 'Book retrieved successfully');
+    // Convert Book to array
+    return $this->successResponse(
+        $book->toArray(), 
+        'Book retrieved successfully'
+    );
   }
 
   public function store(BookRequest $request): JsonResponse
   {
     $book = $this->bookService->store($request->validated(), $request);
 
-    return $this->successResponse(data: $book, message: 'Book created successfully', status: 201);
+    // Convert Book to array
+    return $this->successResponse(
+        $book->toArray(), 
+        'Book created successfully', 
+        201
+    );
   }
 
   public function update(BookRequest $request, int $id): JsonResponse
@@ -43,10 +57,14 @@ class BookApiController extends Controller
     $book = $this->bookService->update($id, $request->validated(), $request);
 
     if (!$book) {
-      return $this->errorResponse(message: 'Book not found', status: 404);
+      return $this->errorResponse('Book not found', 404);
     }
 
-    return $this->successResponse(data: $book, message: 'Book updated successfully');
+    // Convert Book to array
+    return $this->successResponse(
+        $book->toArray(), 
+        'Book updated successfully'
+    );
   }
 
   public function destroy(int $id): JsonResponse
@@ -54,9 +72,9 @@ class BookApiController extends Controller
     $deleted = $this->bookService->delete($id);
 
     if (!$deleted) {
-      return $this->errorResponse(message: 'Book not found', status: 404);
+      return $this->errorResponse('Book not found', 404);
     }
 
-    return $this->successResponse(data: [], message: 'Book deleted successfully');
+    return $this->successResponse([], 'Book deleted successfully');
   }
 }

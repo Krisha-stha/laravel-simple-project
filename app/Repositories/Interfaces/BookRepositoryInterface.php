@@ -13,7 +13,7 @@ interface BookRepositoryInterface
 
     public function create(array $data): Book;
 
-    public function update(int $id, array $data): Book;
+    public function update(int $id, array $data): ?Book;
 
     public function delete(int $id): bool;
 }
