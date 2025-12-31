@@ -18,4 +18,15 @@ interface BookRepositoryInterface
     public function delete(int $id): bool;
     public function search(string $query, int $perPage = 15): LengthAwarePaginator;
     public function findByAuthor(int $authorId, int $perPage = 15): LengthAwarePaginator;
+    
+    public function getFeaturedBooks(int $perPage = 15): LengthAwarePaginator;
+    
+    public function getTrashedBooks(int $perPage = 15): LengthAwarePaginator;
+    public function restore(int $id): bool;
+    public function forceDelete(int $id): bool;
+    
+    public function getBooksByPriceRange(float $minPrice, float $maxPrice, int $perPage = 15): LengthAwarePaginator;
+    public function bulkUpdateFeatured(array $bookIds, bool $isFeatured): int;
+    public function getStatistics(): array;
+    public function getBooksByMonth(int $year = null): Collection;
 }
